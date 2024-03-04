@@ -1,24 +1,33 @@
 namespace StackCalculator;
 
+/// <summary>
+/// Stack class based on LinkedList.
+/// </summary>
 public class LinkedListStack : IStack
 {
-    private LinkedList<float> linkedList;
+    private readonly LinkedList<float> linkedList;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="LinkedListStack"/> class.
+    /// </summary>
     public LinkedListStack() => this.linkedList = new ();
 
+    /// <inheritdoc/>
     public bool IsEmpty { get => this.linkedList.Count == 0; }
 
-    public float Pop()
+    /// <inheritdoc/>
+    public (float element, bool isPopped) Pop()
     {
-        if (this.IsEmpty)
+        var popped = this.linkedList.Last;
+        if (popped is null)
         {
-            throw new InvalidOperationException("Cannot pop from empty stack");
+            return (0, false);
         }
 
-        var popped = this.linkedList.Last;
         this.linkedList.RemoveLast();
-        return popped.Value;
+        return (popped.Value, true);
     }
 
+    /// <inheritdoc/>
     public void Push(float element) => this.linkedList.AddLast(element);
 }

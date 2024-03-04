@@ -1,17 +1,26 @@
 namespace StackCalculator;
 
-public class StackCalculator
+/// <summary>
+/// Class to compute expressions using stack.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="StackCalculator"/> class.
+/// </remarks>
+/// <param name="stack">Stack to use in StackCalculator.</param>
+public class StackCalculator(IStack stack)
 {
     private const float Delta = 1e-12f;
 
-    private IStack stack;
+    private readonly IStack stack = stack;
 
-    public StackCalculator(IStack stack) => this.stack = stack;
-
-    public float Calculate(string expression)
+    /// <summary>
+    /// Method calculates expression in postfix form and returns result.
+    /// </summary>
+    /// <param name="expression">Expression in postifx form.</param>
+    /// <returns>Returns computed result and bool flag that indicates whether method worked correctly.</returns>
+    public (float result, bool isCorrect) Calculate(string expression)
     {
         var splittedExpression = expression.Split();
-
         for (int i = 0; i < splittedExpression.Length; ++i)
         {
             if (int.TryParse(splittedExpression[i], out int operand))
@@ -20,8 +29,13 @@ public class StackCalculator
             }
             else
             {
-                float firstOperand = this.stack.Pop();
-                float secondOperand = this.stack.Pop();
+                var (firstOperand, isFirstPopped) = this.stack.Pop();
+                var (secondOperand, isSecondPopped) = this.stack.Pop();
+                if (!isFirstPopped || !isSecondPopped)
+                {
+                    return (0, false);
+                }
+
                 switch (splittedExpression[i])
                 {
                     case "+":
@@ -36,17 +50,19 @@ public class StackCalculator
                     case "/":
                         if (Math.Abs(firstOperand) < Delta)
                         {
-                            throw new ArgumentException("Expression contains division by zero");
+                            return (0, false);
                         }
 
                         this.stack.Push(secondOperand / firstOperand);
                         break;
                     default:
-                        throw new ArgumentException("Incorrect expression");
+                        return (0, false);
                 }
             }
         }
 
-        return this.stack.Pop();
+        var (result, isCorrect) = this.stack.Pop();
+
+        return isCorrect ? (result, true) : (0, false);
     }
 }

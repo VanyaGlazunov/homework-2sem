@@ -2,7 +2,15 @@
 
 Console.WriteLine("Enter expression in reverse polish notation");
 
-string? expression = Console.ReadLine();
+var expression = Console.ReadLine();
+
+if (expression is null)
+{
+    Console.WriteLine("Incorrect input");
+    return;
+}
+
+var kek = new ListStack();
 
 var resultWithListStack = new StackCalculator.StackCalculator(new ListStack()).Calculate(expression);
 var resultWithLinkedListStack = new StackCalculator.StackCalculator(new LinkedListStack()).Calculate(expression);

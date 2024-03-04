@@ -12,8 +12,14 @@ if (expression is null)
 
 var kek = new ListStack();
 
-var resultWithListStack = new StackCalculator.StackCalculator(new ListStack()).Calculate(expression);
-var resultWithLinkedListStack = new StackCalculator.StackCalculator(new LinkedListStack()).Calculate(expression);
+var (resultWithListStack, isCorrectListStack) = new StackCalculator.StackCalculator(new ListStack()).Calculate(expression);
+var (resultWithLinkedListStack, isCorrectLinkedListStack) = new StackCalculator.StackCalculator(new LinkedListStack()).Calculate(expression);
+
+if (!isCorrectListStack || !isCorrectLinkedListStack)
+{
+    Console.WriteLine("Incorrect input");
+    return;
+}
 
 Console.WriteLine($"result with ListStack: {resultWithListStack}");
 Console.WriteLine($"result with LinkedListStack: {resultWithLinkedListStack}");

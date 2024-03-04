@@ -61,8 +61,8 @@ public class StackCalculator(IStack stack)
             }
         }
 
-        var (result, isCorrect) = this.stack.Pop();
+        var (result, isPopped) = this.stack.Pop();
 
-        return isCorrect ? (result, true) : (0, false);
+        return isPopped && this.stack.IsEmpty ? (result, true) : (0, false);
     }
 }

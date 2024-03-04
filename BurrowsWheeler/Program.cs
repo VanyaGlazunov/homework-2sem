@@ -32,10 +32,8 @@ if (!testsPassed)
 {
     return;
 }
-else
-{
-    Console.WriteLine("All tests passed");
-}
+
+Console.WriteLine("All tests passed");
 
 var quit = false;
 

@@ -19,5 +19,5 @@ if (!isCorrectListStack || !isCorrectLinkedListStack)
     return;
 }
 
-Console.WriteLine($"result with ListStack: {resultWithListStack}");
-Console.WriteLine($"result with LinkedListStack: {resultWithLinkedListStack}");
+Console.WriteLine($"Result with ListStack: {resultWithListStack}");
+Console.WriteLine($"Result with LinkedListStack: {resultWithLinkedListStack}");

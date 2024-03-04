@@ -2,57 +2,46 @@ namespace StackCalculator.Tests;
 
 public class StackTests
 {
-    ListStack listStack;
-    LinkedListStack linkedListStack;
-    
-    [SetUp]
-    public void SetUp()
+    private static IEnumerable<TestCaseData> Stack()
     {
-        listStack = new ();
-        linkedListStack = new ();
+        yield return new TestCaseData(new ListStack());
+        yield return new TestCaseData(new LinkedListStack());
     }
 
-    [Test]
-    public void Pop_EmptyStack_ReturnsFalse()
+    [TestCaseSource(nameof(Stack))]
+    public void Pop_EmptyStack_ReturnsFalse(IStack stack)
     {
-        var (element, isPopped) = listStack.Pop();
-        Assert.That(!isPopped);
-        (element, isPopped) = linkedListStack.Pop();
+        var (element, isPopped) = stack.Pop();  
         Assert.That(!isPopped);
     }
 
-    [Test]
-    public void Push_OneElement_IsNotEmpty()
+    [TestCaseSource(nameof(Stack))]
+    public void Push_OneElement_IsNotEmpty(IStack stack)
     {
-        listStack.Push(0); 
-        linkedListStack.Push(0);
-        Assert.That(!listStack.IsEmpty && !linkedListStack.IsEmpty);
+        stack.Push(0); 
+        stack.Push(0);
+        Assert.That(!stack.IsEmpty);
     }
 
-    [Test]
-    public void PushPop_OneElement_IsEmpty()
+    [TestCaseSource(nameof(Stack))]
+    public void PushPop_OneElement_IsEmpty(IStack stack)
     {
-        listStack.Push(0);
-        listStack.Pop();
-        linkedListStack.Push(0);
-        linkedListStack.Pop();
-        Assert.That(listStack.IsEmpty && linkedListStack.IsEmpty);
+        stack.Push(0);
+        stack.Pop();
+        Assert.That(stack.IsEmpty);
     }
 
-    [Test]
-    public void PushPop_TenElements_PopReturnsExpectedValueAndTrue()
+    [TestCaseSource(nameof(Stack))]
+    public void PushPop_TenElements_PopReturnsExpectedValueAndTrue(IStack stack)
     {
         for (var i = 0; i < 10; ++i)
         {
-            listStack.Push(i);
-            linkedListStack.Push(i);
+            stack.Push(i);
         }
 
         for (var i = 9; i >= 0; --i)
         {
-            var (element, isPopped) = listStack.Pop();
-            Assert.That(element == i && isPopped);
-            (element, isPopped) = linkedListStack.Pop();
+            var (element, isPopped) = stack.Pop();
             Assert.That(element == i && isPopped);
         }
     }

@@ -10,8 +10,6 @@ if (expression is null)
     return;
 }
 
-var kek = new ListStack();
-
 var (resultWithListStack, isCorrectListStack) = new StackCalculator.StackCalculator(new ListStack()).Calculate(expression);
 var (resultWithLinkedListStack, isCorrectLinkedListStack) = new StackCalculator.StackCalculator(new LinkedListStack()).Calculate(expression);
 

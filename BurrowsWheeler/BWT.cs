@@ -13,7 +13,7 @@ public static class BWT
     /// <param name="inputString"> String to transform. </param>
     /// <returns> The transformed string and end position of the original string. </returns>
     /// <exception cref="ArgumentException"> Thrown when when <paramref name="inputString"/> is null. </exception>
-    public static (string, int) Transform(string? inputString)
+    public static (string Transformed, int EndPosition) Transform(string? inputString)
     {
         if (inputString is null)
         {

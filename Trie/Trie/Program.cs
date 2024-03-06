@@ -41,7 +41,7 @@ while (!quit)
             break;
         case "4":
             Console.WriteLine("Enter prefix");
-            Console.WriteLine($"There are {trie.HowManyStringsStartsWithPrefix(element)} starting with prefix \"{element}\"");
+            Console.WriteLine($"{trie.HowManyStringsStartsWithPrefix(element)} word(s) starting with prefix \"{element}\"");
             break;
         case "5":
             Console.WriteLine($"The size is {trie.Size} words");

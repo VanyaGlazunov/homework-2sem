@@ -15,7 +15,7 @@ public class Trie
     /// <summary>
     /// Gets the number of words in trie.
     /// </summary>
-    public int Size { get; private set; }
+    public int Size { get => this.root.WordsInSubtree; }
 
     /// <summary>
     /// Adds an element and returns true if the element already existed.
@@ -24,29 +24,29 @@ public class Trie
     /// <returns>Bool flag indicating whether <paramref name="element"/> already existed.</returns>
     public bool Add(string element)
     {
+        if (this.Contains(element))
+        {
+            return false;
+        }
+
         var vertex = this.root;
         int index = 0;
+        ++vertex.WordsInSubtree;
         for (; index < element.Length && vertex.Next.ContainsKey(element[index]); ++index)
         {
             vertex = vertex.Next[element[index]];
+            ++vertex.WordsInSubtree;
         }
 
         for (; index < element.Length; ++index)
         {
             vertex.Next[element[index]] = new ();
             vertex = vertex.Next[element[index]];
+            ++vertex.WordsInSubtree;
         }
 
-        if (vertex.IsTerminal)
-        {
-            return false;
-        }
-        else
-        {
-            this.Size++;
-            vertex.IsTerminal = true;
-            return true;
-        }
+        vertex.IsTerminal = true;
+        return true;
     }
 
     /// <summary>
@@ -75,25 +75,25 @@ public class Trie
     /// <returns>Bool indicating whether <paramref name="element"/> existed.</returns>
     public bool Remove(string element)
     {
+        if (!this.Contains(element))
+        {
+            return false;
+        }
+
         var vertex = this.root;
+        --vertex.WordsInSubtree;
         foreach (var symbol in element)
         {
             if (!vertex.Next.TryGetValue(symbol, out vertex))
             {
                 return false;
             }
+
+            --vertex.WordsInSubtree;
         }
 
-        if (vertex.IsTerminal)
-        {
-            this.Size--;
-            vertex.IsTerminal = false;
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        vertex.IsTerminal = false;
+        return true;
     }
 
     /// <summary>
@@ -103,7 +103,6 @@ public class Trie
     /// <returns>Number of strings that starts with <paramref name="prefix"/>.</returns>
     public int HowManyStringsStartsWithPrefix(string prefix)
     {
-        var result = 0;
         var vertex = this.root;
         foreach (var symbol in prefix)
         {
@@ -111,13 +110,9 @@ public class Trie
             {
                 return 0;
             }
-            else
-            {
-                result += vertex.IsTerminal ? 1 : 0;
-            }
         }
 
-        return result;
+        return vertex.WordsInSubtree;
     }
 
     private class TrieElement
@@ -127,5 +122,7 @@ public class Trie
         public Dictionary<char, TrieElement> Next { get; set; }
 
         public bool IsTerminal { get; set; }
+
+        public int WordsInSubtree { get; set; }
     }
 }

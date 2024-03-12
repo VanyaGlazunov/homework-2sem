@@ -84,11 +84,7 @@ public class Trie
         --vertex.WordsInSubtree;
         foreach (var symbol in element)
         {
-            if (!vertex.Next.TryGetValue(symbol, out vertex))
-            {
-                return false;
-            }
-
+            vertex = vertex.Next[symbol];
             --vertex.WordsInSubtree;
         }
 

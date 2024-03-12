@@ -13,7 +13,7 @@ while (!quit)
                         """);
 
     var comand = Console.ReadLine();
-    string? element = " ";
+    var element = " ";
     if (comand is "1" or "2" or "3" or "4")
     {
         Console.WriteLine("Enter string");

@@ -1,3 +1,5 @@
+using System.Linq.Expressions;
+
 namespace Trie.Tests;
 
 public class TrieTests
@@ -107,4 +109,24 @@ public class TrieTests
         Assert.That(trie.HowManyStringsStartsWithPrefix("bb") is 1);
     }
 
+    [Test]
+    public void Contains_DeletePrefix_StringContaningThePrefixStillInTrie()
+    {
+        var words = new [] {"abacaba", "bbb",  "-12393"};
+        var prefixes = new [] {"aba", "b", "-1239"};
+        foreach (var prefix in prefixes)
+        {
+            trie.Add(prefix);
+        }
+        foreach (var word in words)
+        {
+            trie.Add(word);
+        }
+        
+        for (int i = 0; i < 3; ++i)
+        {
+            trie.Remove(prefixes[i]);
+            Assert.That(trie.Contains(words[i]) is true);
+        }
+    }
 }

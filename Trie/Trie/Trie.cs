@@ -1,7 +1,7 @@
 namespace Trie;
 
 /// <summary>
-/// Class realizes Trie data structure for .
+/// Class realizes Trie data structure for storing strings.
 /// </summary>
 public class Trie
 {
@@ -15,7 +15,7 @@ public class Trie
     /// <summary>
     /// Gets the number of words in trie.
     /// </summary>
-    public int Size { get => this.root.WordsInSubtree; }
+    public int Size => this.root.WordsInSubtree;
 
     /// <summary>
     /// Adds an element and returns true if the element already existed.

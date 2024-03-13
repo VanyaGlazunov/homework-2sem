@@ -18,7 +18,7 @@ public class StackCalculator(IStack stack)
     /// </summary>
     /// <param name="expression">Expression in postifx form.</param>
     /// <returns>Returns computed result and bool flag that indicates whether method worked correctly.</returns>
-    public (float result, bool isCorrect) Calculate(string expression)
+    public (float Result, bool IsCorrect) Calculate(string expression)
     {
         var splittedExpression = expression.Split();
         for (int i = 0; i < splittedExpression.Length; ++i)

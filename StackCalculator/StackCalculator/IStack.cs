@@ -14,7 +14,7 @@ public interface IStack
     /// Returns last element and erases it.
     /// </summary>
     /// <returns>Last element in the stack and bool flag indicating whether stack was not empty.</returns>
-    (float element, bool isPopped) Pop();
+    (float Element, bool IsPopped) Pop();
 
     /// <summary>
     /// Adds element to the end of the collection.

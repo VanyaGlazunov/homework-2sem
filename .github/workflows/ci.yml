@@ -14,6 +14,9 @@ jobs:
               run: for f in $(find . -name "*.sln"); do dotnet test $f; done
     build-Windows:
         runs-on: windows-latest
+        defaults:
+          run:
+            shell: cmd
         steps:
             - uses: actions/checkout@v4
             - uses: actions/setup-dotnet@v4

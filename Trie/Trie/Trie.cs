@@ -5,17 +5,60 @@ namespace Trie;
 /// </summary>
 public class Trie
 {
-    private readonly TrieElement root;
+    private TrieElement root;
+
+    private TrieElement pointer;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Trie"/> class.
     /// </summary>
-    public Trie() => this.root = new ();
+    public Trie()
+    {
+        this.root = new ();
+        this.pointer = this.root;
+    }
 
     /// <summary>
     /// Gets the number of words in trie.
     /// </summary>
     public int Size => this.root.WordsInSubtree;
+
+    /// <summary>
+    /// Gets the code of the element which is currently pointed on.
+    /// </summary>
+    public int PointerCode => this.pointer.Code;
+
+    /// <summary>
+    /// Moves pointer to the root.
+    /// </summary>
+    public void MovePointerToRoot() => this.pointer = this.root;
+
+    /// <summary>
+    /// Moves pointer to the next specified character, returns true on success.
+    /// </summary>
+    /// <param name="nextChar">Symbol to move to.</param>
+    /// <returns>True if pointer was moved otherwise false.</returns>
+    public bool MovePointerNext(char nextChar)
+    {
+        if (this.pointer.Next.ContainsKey(nextChar))
+        {
+            this.pointer = this.pointer.Next[nextChar];
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Adds next specified symbol to the pointed element.
+    /// </summary>
+    /// <param name="nextChar">Symbol to add.</param>
+    /// <param name="code">Code of the symbol.</param>
+    public void AddNextToPointer(char nextChar, int code)
+    {
+        this.pointer.WordsInSubtree++;
+        this.pointer.Next[nextChar] = new TrieElement() { Code = code, IsTerminal = true };
+    }
 
     /// <summary>
     /// Adds an element and returns true if the element already existed.
@@ -118,6 +161,8 @@ public class Trie
         public Dictionary<char, TrieElement> Next { get; set; }
 
         public bool IsTerminal { get; set; }
+
+        public int Code { get; set; }
 
         public int WordsInSubtree { get; set; }
     }

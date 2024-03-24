@@ -1,0 +1,6 @@
+[*cs]
+
+# Don't require header
+dotnet_diagnostic.SA1633.severity = none
+# New syntax with initializing collection triggers SA1010
+dotnet_diagnostic.SA1010.severity = none

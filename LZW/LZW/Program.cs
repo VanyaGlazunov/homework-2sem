@@ -1,9 +1,15 @@
 ﻿if (args.Length != 2)
 {
-    Console.WriteLine($"Wrong number of arguments. Please try to specify [-path] and [-mode].");
+    Console.WriteLine($"Wrong number of arguments. Please try to specify [path] and [-mode].");
 }
 
 var bytesFromFile = File.ReadAllBytes(args[0]);
+
+if (bytesFromFile.Length == 0)
+{
+    Console.WriteLine("Cannot work with empty file");
+    return;
+}
 
 switch (args[1])
 {

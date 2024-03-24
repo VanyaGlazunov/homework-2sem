@@ -19,11 +19,11 @@ public static class LZW
     public static byte[] CompressWithBwt(byte[] bytesToCompress)
     {
         var (transformedBytesToCompress, endPosition) = BWT.Transform(bytesToCompress);
-        Console.WriteLine($"{transformedBytesToCompress}, {endPosition}");
+
         var endPositionBytes = BitConverter.GetBytes(endPosition);
-        var tranformedBytes = transformedBytesToCompress.ToList();
-        tranformedBytes.AddRange(endPositionBytes);
-        return Compress([..tranformedBytes]);
+        var transformedBytes = transformedBytesToCompress.ToList();
+        transformedBytes.AddRange(endPositionBytes);
+        return Compress([..transformedBytes]);
     }
 
     /// <summary>
@@ -36,6 +36,7 @@ public static class LZW
         var decompressed = Decompress(bytesToDecompress);
         var endPositionBytes = new[] { decompressed[^4], decompressed[^3], decompressed[^2], decompressed[^1] };
         var endPosition = BitConverter.ToInt32(endPositionBytes);
+
         return BWT.InverseTransform(decompressed[..^4], endPosition);
     }
 

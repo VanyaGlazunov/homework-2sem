@@ -1,0 +1,4 @@
+[*cs]
+
+# Don't want to require file header
+dotnet_diagnostic.SA1633.severity = none

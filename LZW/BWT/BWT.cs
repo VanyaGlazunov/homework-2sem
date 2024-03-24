@@ -25,11 +25,11 @@ public static class BWT
         {
             if (suffixArray[i] != 0)
             {
-                transformed.Append(inputString[suffixArray[i] - 1]);
+                transformed.Add(inputString[suffixArray[i] - 1]);
             }
             else
             {
-                transformed.Append(inputString[^1]);
+                transformed.Add(inputString[^1]);
                 endOfString = i;
             }
         }
@@ -38,11 +38,11 @@ public static class BWT
     }
 
     /// <summary>
-    /// Performs inverse Burrows-Wheeler transorm.
+    /// Performs inverse Burrows-Wheeler transform.
     /// </summary>
     /// <param name="transformed">Byte array to perform inverse transform with. </param>
     /// <param name="endOfString"> Zero-based index of the end of original byte array in transformed array. </param>
-    /// <returns> Returns tranformed string. </returns>
+    /// <returns> Original byte array. </returns>
     /// <exception cref="ArgumentException">Thrown when <paramref name="transformed"/> is null. </exception>
     /// <exception cref="IndexOutOfRangeException">Thrown when <paramref name="endOfString"/> is out of range. </exception>
     public static byte[] InverseTransform(byte[] transformed, int endOfString)
@@ -63,13 +63,14 @@ public static class BWT
             positions[i] = i;
         }
 
-        Array.Sort(transformed, positions);
+        positions = [.. positions.OrderBy((int a) => transformed[a])];
+        Array.Sort(transformed);
 
         List<byte> orginalArray = new (transformed.Length);
         var position = endOfString;
         for (var i = 0; i < transformed.Length; ++i)
         {
-            orginalArray.Append(transformed[position]);
+            orginalArray.Add(transformed[position]);
             position = positions[position];
         }
 
@@ -86,7 +87,7 @@ public static class BWT
             suffixArray[i] = i;
         }
 
-        Array.Sort(inputString, suffixArray);
+        suffixArray = suffixArray.OrderBy((int a) => inputString[a]).ToArray();
 
         for (var i = 1; i < suffixArray.Length; ++i)
         {

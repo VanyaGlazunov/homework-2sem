@@ -30,11 +30,7 @@ public class List<T>
                 throw new IndexOutOfRangeException($"{nameof(index)} is {index}, current length is {this.Length}");
             }
 
-            var pointer = this.head;
-            for (int i = 0; i < index; ++i)
-            {
-                pointer = pointer!.Next;
-            }
+            var pointer = this.GetNodeByIndex(index);
 
             return pointer!.Value;
         }
@@ -46,11 +42,7 @@ public class List<T>
                 throw new IndexOutOfRangeException($"{nameof(index)} is {index}, current length is {this.Length}");
             }
 
-            var pointer = this.head;
-            for (int i = 0; i < index - 1; ++i)
-            {
-                pointer = pointer!.Next;
-            }
+            var pointer = this.GetNodeByIndex(index);
 
             pointer!.Value = value;
         }
@@ -97,11 +89,7 @@ public class List<T>
             return;
         }
 
-        var pointer = this.head;
-        for (int i = 0; i < index - 1; ++i)
-        {
-            pointer = pointer!.Next;
-        }
+        var pointer = this.GetNodeByIndex(index - 1);
 
         ListNode newElement = new (value, pointer!.Next);
         pointer.Next = newElement;
@@ -148,14 +136,21 @@ public class List<T>
             return;
         }
 
+        var pointer = this.GetNodeByIndex(index - 1);
+
+        pointer!.Next = pointer!.Next!.Next;
+        --this.Length;
+    }
+
+    private ListNode GetNodeByIndex(int index)
+    {
         var pointer = this.head;
-        for (int i = 0; i < index - 1; ++i)
+        for (int i = 0; i < index; ++i)
         {
             pointer = pointer!.Next;
         }
 
-        pointer!.Next = pointer!.Next!.Next;
-        --this.Length;
+        return pointer!;
     }
 
     private class ListNode(T value, ListNode? next)

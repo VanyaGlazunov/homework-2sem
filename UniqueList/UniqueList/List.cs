@@ -27,11 +27,11 @@ public class List<T>
         {
             if (index < 0 || index >= this.Length)
             {
-                throw new IndexOutOfRangeException(nameof(index));
+                throw new IndexOutOfRangeException($"{nameof(index)} is {index}, current length is {this.Length}");
             }
 
             var pointer = this.head;
-            for (int i = 0; i < index - 1; ++i)
+            for (int i = 0; i < index; ++i)
             {
                 pointer = pointer!.Next;
             }
@@ -43,7 +43,7 @@ public class List<T>
         {
             if (index < 0 || index >= this.Length)
             {
-                throw new IndexOutOfRangeException(nameof(index));
+                throw new IndexOutOfRangeException($"{nameof(index)} is {index}, current length is {this.Length}");
             }
 
             var pointer = this.head;
@@ -87,12 +87,13 @@ public class List<T>
     {
         if (index < 0 || index > this.Length)
         {
-            throw new IndexOutOfRangeException(nameof(index));
+            throw new IndexOutOfRangeException($"{nameof(index)} is {index}, current length is {this.Length}");
         }
 
         if (index == 0)
         {
             this.head = new (value, this.head);
+            ++this.Length;
             return;
         }
 
@@ -108,32 +109,24 @@ public class List<T>
     }
 
     /// <summary>
-    /// Removes the first occurrence of a specific object from the <see cref="List"/>.
+    /// Returns the zero-based index of the first occurrence of a value in the <see cref="List"/>.
     /// </summary>
-    /// <param name="element">The object to remove from the <see cref="List"/>.</param>
-    /// <exception cref="ElementNotFoundException">Thrown when <paramref name="element"/> not found in the <see cref="List"/>.</exception>
-    public void Remove(T element)
+    /// <param name="element">The object to locate in the <see cref="List"/>.</param>
+    /// <returns>The zero-based index of the first occurrence of <paramref name="element"/> in the <see cref="List"/>, if found; otherwise -1.</returns>
+    public int IndexOf(T element)
     {
-        if (this.head!.Value?.Equals(element) ?? (element is null && this.head!.Value is null))
-        {
-            this.head = this.head.Next;
-        }
-
         var pointer = this.head;
-        ListNode? previousPointer = null;
         for (int i = 0; i < this.Length; ++i)
         {
             if (pointer!.Value?.Equals(element) ?? (pointer!.Value is null && element is null))
             {
-                previousPointer!.Next = pointer.Next;
-                return;
+                return i;
             }
 
-            previousPointer = pointer;
             pointer = pointer.Next;
         }
 
-        throw new ElementNotFoundException($"{nameof(element)} not found");
+        return -1;
     }
 
     /// <summary>
@@ -145,12 +138,13 @@ public class List<T>
     {
         if (index < 0 || index >= this.Length)
         {
-            throw new IndexOutOfRangeException(nameof(index));
+            throw new IndexOutOfRangeException($"{nameof(index)} is {index}, current length is {this.Length}");
         }
 
         if (index == 0)
         {
             this.head = this.head!.Next;
+            --this.Length;
             return;
         }
 

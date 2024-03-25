@@ -45,4 +45,19 @@ public class UniqueList<T> : List<T>
 
         base.Insert(index, element);
     }
+
+    /// <summary>
+    /// Removes the specified element from the List.
+    /// </summary>
+    /// <param name="element">Element to remove.</param>
+    /// <exception cref="ElementNotFoundException">Thrown when <paramref name="element"/> not found in the <see cref="UniqueList"/>.</exception>
+    public void Remove(T element)
+    {
+        if (!this.Contains(element))
+        {
+            throw new ElementNotFoundException(nameof(element));
+        }
+
+        this.RemoveAt(this.IndexOf(element));
+    }
 }

@@ -11,5 +11,6 @@ if (filePath is null)
 var expression = File.ReadAllText(filePath);
 
 ParseTree.ParseTree parseTree = new ();
+parseTree.Build(expression);
 
 Console.WriteLine($"{parseTree.Print()} = {parseTree.Evaluate()}");

@@ -24,7 +24,7 @@ public class Tests
     [TestCase("(* (+ 1 1) 2)")]
     [TestCase("(/ 36 (* (+ 1 5) 4))")]
     [TestCase("(+ 7 (* (+ 3 6) (- 2 4)))")]
-    public void Print_CorrectExpressoin_ReturnsCorrectResutl(string expression)
+    public void Print_CorrectExpression_ReturnsCorrectResult(string expression)
     {
         parseTree.Build(expression);
         Assert.That(parseTree.Print(), Is.EqualTo(expression));

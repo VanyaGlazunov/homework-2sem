@@ -1,7 +1,7 @@
 namespace ParseTree;
 
 /// <summary>
-/// Interface of the node in ParseTree.
+/// Interface of the node in Parse Tree.
 /// </summary>
 public interface IParseTreeNode
 {

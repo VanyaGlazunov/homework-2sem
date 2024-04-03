@@ -1,37 +1,28 @@
 ﻿using Routers;
+using Routers.Exceptions;
 
 if (args.Length != 2)
 {
+    Console.WriteLine("Wrong number of arguments. Try to specify path to input file then path to the outputfile.");
     return;
 }
 
-Graph graph = new();
+Graph graph = NetworkParser.ParseFromFile(args[0]);
 
-using (StreamReader streamReader = new (File.OpenRead(args[0])))
-{
-    while (!streamReader.EndOfStream)
-    {
-        var input = streamReader.ReadLine();
-        var splitted = input!.Split(':', '(', ')', ' ');
-        for (int i = 1; i + 1 < splitted.Length; i += 2)
-        {
-            graph.AddEdge(int.Parse(splitted[0]), int.Parse(splitted[i]), int.Parse(splitted[i + 1]));
-        }
-    }
-}
-
-Graph MaxSpanningTree;
+Graph maxSpanningTree;
 try
 {
-    MaxSpanningTree = graph.GetMaxSpanningTree();
+    maxSpanningTree = graph.GetMaxSpanningTree();
 }
-catch (InvalidOperationException)
+catch (InvalidOperationException e)
 {
-    Console.Error.WriteLine("Network is disconnected."); 
+    Console.Error.WriteLine(e.Message);
+    throw;
+}
+catch (NetworkIsDisconnectedExpceptionException)
+{
+    Console.Error.WriteLine("Cannot make optimal configuration in disconnected network");
     throw;
 }
 
-using (var outputStream = File.OpenWrite(args[1]))
-{
-    MaxSpanningTree.Print(outputStream);
-}
+NetworkParser.WriteToFile(args[1], graph);

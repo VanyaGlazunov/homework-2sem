@@ -1,66 +1,81 @@
 namespace Routers;
 
+using Routers.Exceptions;
+
 public class Graph
 {
-    public bool IsConnected { get => ConectivityCheck.ComponetsCount == 1; }
+    private int componetsCount;
 
-    private Dictionary<int, List<(int to, int weight)>> AdjancencyMatrix = new (); 
+    private UnionFind conectivityCheck = new ();
 
-    private List<Edge> Edges = new ();
-    
-    private UnionFind ConectivityCheck = new ();
-    
+    public int Size { get => this.AdjacencyLists.Count; }
+
+    public bool IsConnected { get => this.componetsCount == 1; }
+
+    public List<Edge> Edges { get; private set; } = new ();
+
+    public Dictionary<int, List<(int to, int Weight)>> AdjacencyLists { get; private set; } = new ();
+
     public void AddEdge(int from, int to, int weight)
     {
-        Edges.Add(new Edge(from, to, weight));
-        if (AdjancencyMatrix.ContainsKey(from))
+        this.Edges.Add(new Edge(from, to, weight));
+        this.AddVertex(from);
+        this.AddVertex(to);
+        this.AdjacencyLists[from].Add((to, weight));
+        this.AdjacencyLists[to].Add((from, weight));
+
+        if (this.conectivityCheck.Find(from) != this.conectivityCheck.Find(to))
         {
-            AdjancencyMatrix[from].Add((to, weight));
+            --this.componetsCount;
         }
 
-        ConectivityCheck.Union(to, from);
+        this.conectivityCheck.Union(from, to);
+    }
+
+    public void AddVertex(int vertex)
+    {
+        if (this.AdjacencyLists.ContainsKey(vertex))
+        {
+            return;
+        }
+
+        this.componetsCount++;
+        this.AdjacencyLists[vertex] = new ();
     }
 
     public Graph GetMaxSpanningTree()
     {
-        if (!this.IsConnected)
+        if (this.Size == 0)
         {
-            throw new InvalidOperationException("Graph is disconnected.");
+            throw new InvalidOperationException("Graph is empty");
         }
 
-        Graph spanningTree = new (); 
-        Edges.Sort((Edge a, Edge b) => b.Weight.CompareTo(a.Weight));
+        if (!this.IsConnected)
+        {
+            throw new NetworkIsDisconnectedExpceptionException();
+        }
+
+        Graph spanningTree = new ();
+        this.Edges.Sort((Edge a, Edge b) => b.Weight.CompareTo(a.Weight));
         UnionFind unionFind = new ();
         foreach (var edge in this.Edges)
         {
-            if (unionFind.Find(edge.From) != unionFind.Find(edge.To))
+            if (unionFind.Find(edge.FirstVertex) != unionFind.Find(edge.SecondVertex))
             {
-                spanningTree.AddEdge(edge.From, edge.To, edge.Weight);
+                spanningTree.AddEdge(edge.FirstVertex, edge.SecondVertex, edge.Weight);
+                unionFind.Union(edge.FirstVertex, edge.SecondVertex);
             }
         }
 
         return spanningTree;
     }
 
-    public void Print(Stream outputStream)
+    public struct Edge(int firstVertex, int secondVertex, int weight)
     {
-        using StreamWriter streamWriter = new(outputStream);
-        foreach (var from in this.AdjancencyMatrix.Keys)
-        {
-            Console.Write($"from: ");
-            foreach (var (to, weight) in this.AdjancencyMatrix[from])
-            {
-                Console.Write($"{to} ({weight})");
-            }
-        }
-    }
+        public int FirstVertex { get; set; } = firstVertex;
 
-    public struct Edge(int from, int to, int weight)
-    {
-        public int From { get; set; } = from;
+        public int SecondVertex { get; set; } = secondVertex;
 
-        public int To { get; set; } = to;
-
-        public int Weight { get; set; } = weight;        
+        public int Weight { get; set; } = weight;
     }
 }

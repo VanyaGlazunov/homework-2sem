@@ -55,7 +55,7 @@ public class RoutersTests
     public void GetMaxSpanningTree_DisconnectedGraph_ThrowsInvalidOperationException(string filePath)
     {
         graph = NetworkParser.ParseFromFile(filePath);
-        Assert.Throws<NetworkIsDisconnectedExpceptionException>(() => graph.GetMaxSpanningTree());
+        Assert.Throws<GraphIsDisconnectedExpceptionException>(() => graph.GetMaxSpanningTree());
     }
 
     public void GetMaxSpanningTree_EmptyGraph_ThrowsInvalidOperationException()

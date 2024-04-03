@@ -1,0 +1,9 @@
+[*cs]
+
+# Don't require header
+dotnet_diagnostic.SA1633.severity = none
+# New syntax with initializing collection triggers SA1010
+dotnet_diagnostic.SA1010.severity = none
+#Syntax that allows to declare prime constructor next to class signature triggers SA1009
+dotnet_diagnostic.SA1009.severity = none
+dotnet_diagnostic.SA1200.severity = none

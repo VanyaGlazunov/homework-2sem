@@ -2,8 +2,17 @@ namespace Routers;
 
 using Routers.Exceptions;
 
+/// <summary>
+/// Static class that helps parsing data from file to the graph representaion and writing data represented by a graph.
+/// </summary>
 public static class NetworkParser
 {
+    /// <summary>
+    /// Creates graph representation of the network that is contained in a file.
+    /// </summary>
+    /// <param name="filePath">Path to the file containing network.</param>
+    /// <returns>Graph that represents network.</returns>
+    /// <exception cref="IncorrectNetworkFormatExceptionException">Thrown when file contains wrong format of network representation.</exception>
     public static Graph ParseFromFile(string filePath)
     {
         using StreamReader streamReader = new (File.OpenRead(filePath));
@@ -60,6 +69,11 @@ public static class NetworkParser
         return graph;
     }
 
+    /// <summary>
+    /// Writes graph representaion of the network to the specified file.
+    /// </summary>
+    /// <param name="filePath">Path to the file.</param>
+    /// <param name="network">Graph that represents network.</param>
     public static void WriteToFile(string filePath, Graph network)
     {
         using StreamWriter streamWriter = new (File.OpenWrite(filePath));

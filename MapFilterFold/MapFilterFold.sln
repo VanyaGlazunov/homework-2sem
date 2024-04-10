@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Functions", "Functions\Functions.csproj", "{7E5E55ED-B2C7-4F0C-857F-29B9608F3AF4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapFilterFold", "MapFilterFold\MapFilterFold.csproj", "{7E5E55ED-B2C7-4F0C-857F-29B9608F3AF4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapFilterFoldTests", "MapFilterFoldTests\MapFilterFoldTests.csproj", "{468686AC-BBFC-4773-AE3C-1B371D9501DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +20,9 @@ Global
 		{7E5E55ED-B2C7-4F0C-857F-29B9608F3AF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E5E55ED-B2C7-4F0C-857F-29B9608F3AF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E5E55ED-B2C7-4F0C-857F-29B9608F3AF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{468686AC-BBFC-4773-AE3C-1B371D9501DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{468686AC-BBFC-4773-AE3C-1B371D9501DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{468686AC-BBFC-4773-AE3C-1B371D9501DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{468686AC-BBFC-4773-AE3C-1B371D9501DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -16,7 +16,7 @@ public class Tests
     public void Constructor_FromListOfIntsWithDefaultComparer_ContainsEveryElemFromList()
     {
         var list = new List<int> { 1, 2, 1000, 100, -1, 0 };
-        var skipList = new SkipList<int>([1, 2, 1000, 100, -1, 0]); 
+        var skipList = new SkipList<int>(list); 
         Assert.That(skipList.Count, Is.EqualTo(6));
         foreach (var elem in list)
         {
@@ -92,5 +92,16 @@ public class Tests
         var skipList = new SkipList<int>(list);
         list.Sort();
         CollectionAssert.AreEqual(skipList, list);
+    }
+
+    [Test]
+    public void Enumerator_ChangeCollectionAfterCreatingEnumerator_ThrowsInvalidOperationException()
+    {
+        var skipList = new SkipList<int>([1, 2, 1000, 100, -1, 0]); 
+        var enumerator = skipList.GetEnumerator();
+        enumerator.MoveNext();
+        skipList.Add(1);
+        Assert.Throws<InvalidOperationException>(() => enumerator.MoveNext());
+        Assert.Throws<InvalidOperationException>(() => enumerator.Reset());
     }
 }

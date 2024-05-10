@@ -323,6 +323,11 @@ public class SkipList<T> : IList<T>
         {
             get
             {
+                if (version != skipList.version)
+                {
+                    throw new InvalidOperationException("Invalid iterator");
+                }
+
                 if (isHead)
                 {
                     throw new InvalidOperationException("Current position is before first element");

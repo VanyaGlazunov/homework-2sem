@@ -1,7 +1,11 @@
-﻿using System.Collections;
+﻿namespace SkipList;
 
-namespace SkipList;
+using System.Collections;
 
+/// <summary>
+/// Class realizes skip list data structure.
+/// </summary>
+/// <typeparam name="T">The type of elements in skip list.</typeparam>
 public class SkipList<T> : IList<T>
 {
     private readonly Comparer<T> comparer;
@@ -10,105 +14,203 @@ public class SkipList<T> : IList<T>
     private SkipListNode bottomHead;
     private SkipListNode topHead;
 
-    public bool IsEmpty => this.Count == 0;
-
-    public int Count { get; private set; }
-
-    public bool IsReadOnly => false;
-
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SkipList{T}"/> class that is empty and has the default comparer for <typeparamref name="T"/>.
+    /// </summary>
     public SkipList()
     {
         bottomHead = new ();
-        topHead = this.bottomHead;
+        topHead = bottomHead;
         comparer = Comparer<T>.Default;
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SkipList{T}"/> class that is empty and has specified comparer.
+    /// </summary>
+    /// <param name="comparer">Comparer to use for comparing elements.</param>
     public SkipList(Comparer<T> comparer)
     : this()
     {
         this.comparer = comparer;
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SkipList{T}"/> class that contains elements copied from the specified collection.
+    /// </summary>
+    /// <param name="values">The collection whoose elements are copied to the new skiplist.</param>
     public SkipList(IEnumerable<T> values)
     : this()
     {
-        var currentNode = topHead;
         foreach (var value in values)
         {
-            currentNode.Next = new () { Key = value };
-            currentNode = currentNode.Next;
-            ++Count;
-        }
-
-        for (int level = 2; level <= Count; level <<= 1)
-        {
-            var nextLevelHead = new SkipListNode() { Down = topHead };
-            var nextLevelCurrentNode = nextLevelHead;
-            for (currentNode = topHead.Next; currentNode != null && currentNode.Next != null; currentNode = currentNode.Next.Next)
-            {
-                nextLevelCurrentNode.Next = new () { Key = currentNode.Key, Down = currentNode };
-                nextLevelCurrentNode = nextLevelCurrentNode.Next;
-            }
-            topHead = nextLevelHead;
+            this.Add(value);
         }
     }
 
-    public Enumerator GetEnumerator()
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SkipList{T}"/> class that contains elements copied from the specified collection and has specified comparer.
+    /// </summary>
+    /// <param name="values">The collection whoose elements are copied to the new skiplist.</param>
+    /// <param name="comparer">Comparer to use for comparing elements.</param>
+    public SkipList(IEnumerable<T> values, Comparer<T> comparer)
+    : this(values)
     {
-        return new Enumerator(this);
+        this.comparer = comparer;
     }
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
+    /// <summary>
+    /// Gets the number of elements in the <see cref="SkipList{T}"/>.
+    /// </summary>
+    public int Count { get; private set; }
 
-    IEnumerator<T> IEnumerable<T>.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
+    /// <summary>
+    /// Gets a value indicating whether the ICollection is read-only.
+    /// </summary>
+    bool ICollection<T>.IsReadOnly => false;
 
-    public T this[int index]
+    /// <inheritdoc/>
+    T IList<T>.this[int index]
     {
         get { throw new NotSupportedException(); }
         set { throw new NotSupportedException(); }
     }
 
-    public void RemoveAt(int position)
+    /// <summary>
+    /// Returns an enumerator that iterates through the <see cref="SkipList{T}"/>.
+    /// </summary>
+    /// <returns>A <see cref="List{T}.Enumerator"/> for the <see cref="List{T}"/>.</returns>
+    public Enumerator GetEnumerator()
+    {
+        return new Enumerator(this);
+    }
+
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
+    /// <returns>An <see cref="IEnumerator"/> that can be used to iterate through the collection.</returns>
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
+    /// <returns>An <see cref="IEnumerator{T}"/> that can be used to iterate through the collection.</returns>
+    IEnumerator<T> IEnumerable<T>.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+
+    /// <summary>
+    /// Adds object to the <see cref="SkipList{T}"/>.
+    /// </summary>
+    /// <param name="key">The object to be added to the end of the <see cref="SkipList{T}"/>.</param>
+    public void Add(T key)
+    {
+        var node = Add(topHead, key);
+        if (node != null)
+        {
+            var newTopHead = new SkipListNode
+            {
+                Down = topHead,
+                Next = new () { Key = key, Down = node },
+            };
+            topHead = newTopHead;
+        }
+
+        ++Count;
+        ++version;
+    }
+
+    /// <inheritdoc/>
+    void IList<T>.Insert(int position, T item)
     {
         throw new NotSupportedException();
     }
 
-    public void Insert(int position, T item)
+    /// <summary>
+    /// Removes the first occurrecne of a specific object.
+    /// </summary>
+    /// <param name="item">The object to remove from the <see cref="SkipList{T}"/>.</param>
+    /// <returns>true if item is successfully removed; otherwise false.</returns>
+    public bool Remove(T item)
+    {
+        if (Remove(topHead, item))
+        {
+            --Count;
+            ++version;
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <inheritdoc/>
+    void IList<T>.RemoveAt(int position)
     {
         throw new NotSupportedException();
     }
 
+    /// <summary>
+    /// Removes all elements from the <see cref="SkipList{T}"/>.
+    /// </summary>
+    public void Clear()
+    {
+        bottomHead = new ();
+        topHead = bottomHead;
+        ++version;
+        Count = 0;
+    }
+
+    /// <summary>
+    /// Determines whether an element is in the <see cref="SkipList{T}"/>.
+    /// </summary>
+    /// <param name="key">The object to locate in the <see cref="SkipList{T}"/>.</param>
+    /// <returns>true if key is found in the <see cref="SkipList{T}"/>; false otherwise.</returns>
+    public bool Contains(T key)
+    {
+        return Find(topHead, key) != null;
+    }
+
+    /// <summary>
+    /// Searches for the specified object and returns the zero-based index of the first occurrence within the entire <see cref="SkipList{T}"/>.
+    /// </summary>
+    /// <param name="key">The object to locate in the <see cref="SkipList{T}"/>.</param>
+    /// <returns>The zero-based index of the first occurrence of item within the entire <see cref="SkipList{T}"/>, if found; otherwise, -1.</returns>
+    public int IndexOf(T key)
+    {
+        var currentNode = bottomHead;
+        var index = 0;
+        while (currentNode.Next != null && comparer.Compare(currentNode.Next.Key, key) < 0)
+        {
+            currentNode = currentNode.Next;
+            index++;
+        }
+
+        return currentNode.Next != null && comparer.Compare(currentNode.Next.Key, key) == 0 ? index : -1;
+    }
+
+    /// <summary>
+    /// Copies the entire <see cref="SkipList{T}"/> to a compatible one-dimensional array, starting at the specified index of the target array.
+    /// </summary>
+    /// <param name="array">The one-dimensional Array that is the destination of the elements copied from <see cref="SkipList{T}"/>.</param>
+    /// <param name="arrayIndex">The zero-based index in array at which copying begins.</param>
+    /// <exception cref="ArgumentException">Thrown when the number of elements in the <see cref="SkipList{T}"/> is greater than the available space.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when array is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when arrayIndex is greater than array length or less than zero.</exception>
     public void CopyTo(T?[] array, int arrayIndex)
     {
-        if (array != null && array.Rank != 1)
-        {
-            throw new ArgumentException();
-        }
-
-        if (array == null)
-        {
-            throw new ArgumentNullException(nameof(array));
-        }
-
-        if (bottomHead == null)
-        {
-            return;
-        }
+        ArgumentNullException.ThrowIfNull(array);
 
         if (arrayIndex < 0 || arrayIndex >= array.Length)
         {
             throw new ArgumentOutOfRangeException(nameof(arrayIndex));
         }
 
-        if (arrayIndex + Count >= array.Length)
+        if (arrayIndex + Count > array.Length)
         {
-            throw new ArgumentException();
+            throw new ArgumentException("Not enough space to copy elements");
         }
 
         var currentNode = bottomHead;
@@ -116,67 +218,8 @@ public class SkipList<T> : IList<T>
         {
             array[arrayIndex] = currentNode.Next.Key;
             currentNode = currentNode.Next;
+            arrayIndex++;
         }
-    }
-
-    public int IndexOf(T key)
-    {
-        if (bottomHead == null)
-        {
-            throw new InvalidOperationException();
-        }
-
-        var currentNode = bottomHead;
-        int index = 0;
-        while (currentNode.Next != null && comparer.Compare(currentNode.Next.Key, key) < 0)
-        {
-            currentNode = currentNode.Next;
-            index++;
-        }
-
-        if (currentNode.Next != null && comparer.Compare(currentNode.Next.Key, key) == 0)
-        {
-            return index - 1;
-        }
-        else
-        {
-            throw new InvalidOperationException();
-        }
-
-    }
-
-    public void Clear()
-    {
-        bottomHead = new ();
-        topHead = bottomHead;
-    }
-
-    public bool Contains(T key)
-    {
-        return Find(topHead, key) != null;
-    }
-
-    public void Add(T key)
-    {
-        var node = Add(topHead, key);
-        if (node != null)
-        {
-            var newTopHead = new SkipListNode() { Key = key, Down = topHead };
-            topHead = newTopHead;
-        }
-
-        ++Count;
-    }
-
-    public bool Remove(T key)
-    {
-        if (Remove(topHead, key))
-        {
-            --Count;
-            return true;
-        }
-
-        return false;
     }
 
     private bool Remove(SkipListNode node, T key)
@@ -251,13 +294,20 @@ public class SkipList<T> : IList<T>
         }
     }
 
+    /// <summary>
+    /// Enumerates the elements of the <see cref="SkipList{t}"/>.
+    /// </summary>
     public struct Enumerator : IEnumerator<T>
     {
         private SkipList<T> skipList;
         private int version;
-        private SkipListNode? current;
+        private SkipListNode current;
         private bool isHead;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SkipList{T}.Enumerator"/> struct.
+        /// </summary>
+        /// <param name="skiplist">SkipList to enumerate.</param>
         public Enumerator(SkipList<T> skiplist)
         {
             this.skipList = skiplist;
@@ -266,18 +316,53 @@ public class SkipList<T> : IList<T>
             isHead = true;
         }
 
-        public void Dispose()
+        /// <summary>
+        /// Gets the element at the current position of the enumerator.
+        /// </summary>
+        public T Current
+        {
+            get
+            {
+                if (isHead)
+                {
+                    throw new InvalidOperationException("Current position is before first element");
+                }
+
+                if (current.Key == null)
+                {
+                    throw new InvalidOperationException("Current node value is null");
+                }
+
+                return current.Key;
+            }
+        }
+
+        /// <summary>
+        /// Gets the element at the current position of the enumerator.
+        /// </summary>
+        object IEnumerator.Current => Current!;
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public readonly void Dispose()
         {
         }
 
+        /// <summary>
+        /// Advances enumerator to the next element of the <see cref="SkipList{T}"/>.
+        /// </summary>
+        /// <returns>true if succsessfully advanced to the next element; false if the enumerator has passed the end of the collection.</returns>
+        /// <exception cref="InvalidOperationException">Thrown if collection was modified after creating enumerator.</exception>
         public bool MoveNext()
         {
             if (version != skipList.version)
             {
-                throw new InvalidOperationException("Invalidated iterator");
+                throw new InvalidOperationException("Invalid iterator");
             }
 
-            if (current != null) {
+            if (current.Next != null)
+            {
                 current = current.Next;
                 isHead = false;
                 return true;
@@ -286,18 +371,19 @@ public class SkipList<T> : IList<T>
             return false;
         }
 
-        public T Current => current.Key;
-
-        object IEnumerator.Current => Current;
-
+        /// <summary>
+        /// Sets the enumerator to its initial position.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">Thrown if collection was modified after creating enumerator.</exception>
         public void Reset()
         {
             if (version != skipList.version)
             {
-                throw new InvalidOperationException();
+                throw new InvalidOperationException("Invalid iterator");
             }
 
             current = skipList.bottomHead;
+            isHead = true;
         }
     }
 

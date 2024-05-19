@@ -95,6 +95,20 @@ public class Tests
     }
 
     [Test]
+    public void Enumerator_InsideForeach()
+    {
+        var list = new List<int> { 1, 2, 1000, 100, -1, 0 };
+        var skipList = new SkipList<int>(list);
+        var actual = new List<int>();
+        foreach (var item in skipList)
+        {
+            actual.Add(item);
+        }
+        list.Sort();
+        CollectionAssert.AreEqual(actual, list);
+    }
+
+    [Test]
     public void Enumerator_ChangeCollectionAfterCreatingEnumerator_ThrowsInvalidOperationException()
     {
         var skipList = new SkipList<int>([1, 2, 1000, 100, -1, 0]); 

@@ -71,36 +71,21 @@ public class SkipList<T> : IList<T>
     /// <inheritdoc/>
     T IList<T>.this[int index]
     {
-        get { throw new NotSupportedException(); }
-        set { throw new NotSupportedException(); }
-    }
-
-    /// <summary>
-    /// Returns an enumerator that iterates through the <see cref="SkipList{T}"/>.
-    /// </summary>
-    /// <returns>A <see cref="List{T}.Enumerator"/> for the <see cref="List{T}"/>.</returns>
-    public Enumerator GetEnumerator()
-    {
-        return new Enumerator(this);
+        get => throw new NotSupportedException();
+        set => throw new NotSupportedException();
     }
 
     /// <summary>
     /// <inheritdoc/>
     /// </summary>
     /// <returns>An <see cref="IEnumerator"/> that can be used to iterate through the collection.</returns>
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
     /// <summary>
     /// <inheritdoc/>
     /// </summary>
     /// <returns>An <see cref="IEnumerator{T}"/> that can be used to iterate through the collection.</returns>
-    IEnumerator<T> IEnumerable<T>.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
+    public IEnumerator<T> GetEnumerator() => new Enumerator(this);
 
     /// <summary>
     /// Adds object to the <see cref="SkipList{T}"/>.
@@ -124,10 +109,7 @@ public class SkipList<T> : IList<T>
     }
 
     /// <inheritdoc/>
-    void IList<T>.Insert(int position, T item)
-    {
-        throw new NotSupportedException();
-    }
+    void IList<T>.Insert(int position, T item) => throw new NotSupportedException();
 
     /// <summary>
     /// Removes the first occurrecne of a specific object.
@@ -147,10 +129,7 @@ public class SkipList<T> : IList<T>
     }
 
     /// <inheritdoc/>
-    void IList<T>.RemoveAt(int position)
-    {
-        throw new NotSupportedException();
-    }
+    void IList<T>.RemoveAt(int position) => throw new NotSupportedException();
 
     /// <summary>
     /// Removes all elements from the <see cref="SkipList{T}"/>.
@@ -297,10 +276,10 @@ public class SkipList<T> : IList<T>
     /// <summary>
     /// Enumerates the elements of the <see cref="SkipList{t}"/>.
     /// </summary>
-    public struct Enumerator : IEnumerator<T>
+    private struct Enumerator : IEnumerator<T>
     {
-        private SkipList<T> skipList;
-        private int version;
+        private readonly SkipList<T> skipList;
+        private readonly int version;
         private SkipListNode current;
         private bool isHead;
 

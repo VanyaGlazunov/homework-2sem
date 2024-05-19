@@ -99,16 +99,8 @@ public static class LZW
         (var nextCode, isEndOfData) = compressedSequence.GetNextCode(currentCodeSize);
         while (!isEndOfData)
         {
-            if (nextCode == newCode)
-            {
-                dictionary[nextCode] = [.. dictionary[currentCode], dictionary[currentCode][0]];
-                decompressed.AddRange(dictionary[nextCode]);
-            }
-            else
-            {
-                decompressed.AddRange(dictionary[nextCode]);
-                dictionary[newCode] = [..dictionary[currentCode], dictionary[nextCode][0]];
-            }
+            dictionary[newCode] = newCode == nextCode ? [.. dictionary[currentCode], dictionary[currentCode][0]] : [..dictionary[currentCode], dictionary[nextCode][0]];
+            decompressed.AddRange(dictionary[nextCode]);
 
             newCode++;
             currentCodeSize += newCode >= (1 << currentCodeSize) ? 1 : 0;

@@ -3,10 +3,10 @@ namespace LZW.Tests;
 public class Tests
 {
 
-    [TestCase("../../../ShakespeareBig.txt")]
-    [TestCase("../../../cmatrix")]
-    [TestCase("../../../git-cheat-sheet-education.pdf")]
-    [TestCase("../../../cat.png")]
+    [TestCase("TestFiles/ShakespeareBig.txt")]
+    [TestCase("TestFiles/cmatrix")]
+    [TestCase("TestFiles/git-cheat-sheet-education.pdf")]
+    [TestCase("TestFiles/cat.png")]
     [Test]
     public void CompressDecompress_DifferentFiles_DataIsNotCorrupted(string filePath)
     {
@@ -16,10 +16,10 @@ public class Tests
         CollectionAssert.AreEqual(expectedFile, actualFile);
     }
 
-    [TestCase("../../../ShakespeareBig.txt")]
-    [TestCase("../../../cmatrix")]
-    [TestCase("../../../git-cheat-sheet-education.pdf")]
-    [TestCase("../../../cat.png")]
+    [TestCase("TestFiles/ShakespeareBig.txt")]
+    [TestCase("TestFiles/cmatrix")]
+    [TestCase("TestFiles/git-cheat-sheet-education.pdf")]
+    [TestCase("TestFiles/cat.png")]
     [Test]
     public void CompressDecompressWithBWT_DifferentFiles_DataIsNotCorrupted(string filePath)
     {
@@ -28,6 +28,4 @@ public class Tests
 
         CollectionAssert.AreEqual(expectedFile, actualFile);
     }
-
-
 }

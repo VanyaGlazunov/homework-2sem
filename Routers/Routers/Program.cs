@@ -7,22 +7,20 @@ if (args.Length != 2)
     return;
 }
 
-Graph graph = NetworkParser.ParseFromFile(args[0]);
-
 Graph maxSpanningTree;
 try
 {
+    Graph graph = NetworkParser.ParseFromFile(args[0]);
     maxSpanningTree = graph.GetMaxSpanningTree();
+    NetworkParser.WriteToFile(args[1], graph);
 }
 catch (InvalidOperationException e)
 {
     Console.Error.WriteLine(e.Message);
-    throw;
+    Environment.Exit(1);
 }
-catch (GraphIsDisconnectedExpceptionException)
+catch (GraphIsDisconnectedException)
 {
     Console.Error.WriteLine("Cannot make optimal configuration in disconnected network");
-    throw;
+    Environment.Exit(1);
 }
-
-NetworkParser.WriteToFile(args[1], graph);

@@ -3,13 +3,13 @@ namespace Routers.Exceptions;
 /// <summary>
 /// Exception thrown when network representaion is incorrect.
 /// </summary>
-public class IncorrectNetworkFormatExceptionException : System.Exception
+public class IncorrectNetworkFormatException : System.Exception
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="IncorrectNetworkFormatExceptionException"/> class with a specified error message.
+    /// Initializes a new instance of the <see cref="IncorrectNetworkFormatException"/> class with a specified error message.
     /// </summary>
     /// <param name="message">Text of the error message.</param>
-    public IncorrectNetworkFormatExceptionException(string message)
+    public IncorrectNetworkFormatException(string message)
      : base(message)
     {
     }

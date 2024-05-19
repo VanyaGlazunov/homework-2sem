@@ -20,7 +20,7 @@ public class RoutersTests
         return sumOfWieghts;
     }
 
-    private static (bool IsTree, int sumOfWieghts) CheckForTree(Graph graph)
+    private static (bool IsTree, int sumOfWeights) CheckForTree(Graph graph)
     {
         if (!graph.IsConnected || graph.Edges.Count != graph.Size - 1)
         {
@@ -38,10 +38,10 @@ public class RoutersTests
         graph = new ();
     }
 
-    [TestCase("../../../TestFiles/CompleteGraph.txt", 147)]
-    [TestCase("../../../TestFiles/OneEdgeGraph.txt", 100)]
-    [TestCase("../../../TestFiles/SampleFromTask.txt", 15)]
-    [TestCase("../../../TestFiles/Tree.txt", 36)]
+    [TestCase("TestFiles/CompleteGraph.txt", 147)]
+    [TestCase("TestFiles/OneEdgeGraph.txt", 100)]
+    [TestCase("TestFiles/SampleFromTask.txt", 15)]
+    [TestCase("TestFiles/Tree.txt", 36)]
     public void GetMaxSpanningTree_ConnectedGraph_ReturnsCorrectTree(string filePath, int expectedSumOfWeights)
     {
         graph = NetworkParser.ParseFromFile(filePath);
@@ -51,11 +51,11 @@ public class RoutersTests
         Assert.That(actualSumOfWeights == expectedSumOfWeights, $"{actualSumOfWeights}, {expectedSumOfWeights}");
     }
 
-    [TestCase("../../../TestFiles/TwoComponents.txt")]
+    [TestCase("TestFiles/TwoComponents.txt")]
     public void GetMaxSpanningTree_DisconnectedGraph_ThrowsInvalidOperationException(string filePath)
     {
         graph = NetworkParser.ParseFromFile(filePath);
-        Assert.Throws<GraphIsDisconnectedExpceptionException>(() => graph.GetMaxSpanningTree());
+        Assert.Throws<GraphIsDisconnectedException>(() => graph.GetMaxSpanningTree());
     }
 
     public void GetMaxSpanningTree_EmptyGraph_ThrowsInvalidOperationException()
@@ -63,18 +63,18 @@ public class RoutersTests
         Assert.Throws<InvalidOperationException>(() => graph.GetMaxSpanningTree());
     }
 
-    [TestCase("../../../TestFiles/NoWeights.txt")]
-    [TestCase("../../../TestFiles/MissingEdge.txt")]
-    [TestCase("../../../TestFiles/NoColons.txt")]
+    [TestCase("TestFiles/NoWeights.txt")]
+    [TestCase("TestFiles/MissingEdge.txt")]
+    [TestCase("TestFiles/NoColons.txt")]
     public void ParseFromFile_IncorrectNetwork_ThrowsIncorrectNetworkFormatException(string filePath)
     {
-        Assert.Throws<IncorrectNetworkFormatExceptionException>(() => NetworkParser.ParseFromFile(filePath));
+        Assert.Throws<IncorrectNetworkFormatException>(() => NetworkParser.ParseFromFile(filePath));
     }
 
-    [TestCase("../../../TestFiles/CompleteGraph.txt")]
-    [TestCase("../../../TestFiles/OneEdgeGraph.txt")]
-    [TestCase("../../../TestFiles/SampleFromTask.txt")]
-    [TestCase("../../../TestFiles/Tree.txt")]
+    [TestCase("TestFiles/CompleteGraph.txt")]
+    [TestCase("TestFiles/OneEdgeGraph.txt")]
+    [TestCase("TestFiles/SampleFromTask.txt")]
+    [TestCase("TestFiles/Tree.txt")]
    public void ParseFromFileWriteToFile_CorrectNetwork_WritesExpectedNetwork(string inputFileName)
     {
         var network = NetworkParser.ParseFromFile(inputFileName);

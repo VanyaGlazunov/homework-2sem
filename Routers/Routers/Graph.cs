@@ -14,12 +14,12 @@ public class Graph
     /// <summary>
     /// Gets the number of verticies in the graph.
     /// </summary>
-    public int Size { get => this.AdjacencyLists.Count; }
+    public int Size => this.AdjacencyLists.Count;
 
     /// <summary>
     /// Gets a value indicating whether the graph is connected or not.
     /// </summary>
-    public bool IsConnected { get => this.componetsCount == 1; }
+    public bool IsConnected => this.componetsCount == 1;
 
     /// <summary>
     /// Gets list of all undirected edges in the graph.
@@ -83,7 +83,7 @@ public class Graph
 
         if (!this.IsConnected)
         {
-            throw new GraphIsDisconnectedExpceptionException();
+            throw new GraphIsDisconnectedException();
         }
 
         Graph spanningTree = new ();

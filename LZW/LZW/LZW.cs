@@ -131,6 +131,7 @@ public static class LZW
 
         public void Clear()
         {
+            this.codes.Clear();
             this.firstFreeBit = 0;
             this.lastReadBit = 0;
         }

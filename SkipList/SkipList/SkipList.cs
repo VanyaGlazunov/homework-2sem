@@ -208,7 +208,7 @@ public class SkipList<T> : IList<T>
             node = node.Next;
         }
 
-        bool result = false;
+        var result = false;
         if (node.Down != null)
         {
             result |= Remove(node.Down, key);
@@ -230,15 +230,7 @@ public class SkipList<T> : IList<T>
             node = node.Next;
         }
 
-        SkipListNode? downNode;
-        if (node.Down == null)
-        {
-            downNode = null;
-        }
-        else
-        {
-            downNode = Add(node.Down, key);
-        }
+        var downNode = node.Down == null ? null : Add(node.Down, key);
 
         if (downNode != null || node.Down == null)
         {

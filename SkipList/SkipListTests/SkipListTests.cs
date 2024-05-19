@@ -2,7 +2,6 @@ namespace SkipList.Tests;
 
 public class Tests
 {
-
     [Test]
     public void Contains_OneElement_ReturnsExpectedResult()
     {
@@ -56,6 +55,9 @@ public class Tests
         var list = new List<int> { 1, 2, 1000, 100, -1, 0 };
         var skipList = new SkipList<int> (list);
         skipList.Clear();
+
+        Assert.That(skipList.Count, Is.EqualTo(0));
+
         foreach (var elem in list)
         {
             Assert.That(skipList.Contains(elem), Is.False);

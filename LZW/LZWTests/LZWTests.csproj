@@ -18,6 +18,12 @@
   </ItemGroup>
 
   <ItemGroup>
+  <Content Include="TestFiles/*">
+    <CopyToOutputDirectory>Always</CopyToOutputDirectory> 
+  </Content>
+</ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\LZW\LZW.csproj" />
   </ItemGroup>
 

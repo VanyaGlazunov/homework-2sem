@@ -9,14 +9,8 @@ public class Operand(int operand) : IParseTreeNode
     private int operand = operand;
 
     /// <inheritdoc/>
-    public double Evaluate()
-    {
-        return this.operand;
-    }
+    public double Evaluate() => this.operand;
 
     /// <inheritdoc/>
-    public string Print()
-    {
-        return this.operand.ToString();
-    }
+    public string Print() => this.operand.ToString();
 }

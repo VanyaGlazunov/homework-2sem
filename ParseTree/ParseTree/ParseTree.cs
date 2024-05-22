@@ -5,7 +5,7 @@ namespace ParseTree;
 /// </summary>
 public class ParseTree
 {
-    private static char[] operations = ['+', '-', '*', '/'];
+    private static readonly char[] Operations = ['+', '-', '*', '/'];
 
     private IParseTreeNode? root;
 
@@ -110,7 +110,7 @@ public class ParseTree
             return (new Operand(operand), ++index);
         }
 
-        if (tokens[index].Length == 1 && operations.Contains(tokens[index][0]))
+        if (tokens[index].Length == 1 && Operations.Contains(tokens[index][0]))
         {
             Operator operation = new Operator(tokens[index][0]);
             ++index;

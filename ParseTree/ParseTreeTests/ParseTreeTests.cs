@@ -18,7 +18,7 @@ public class Tests
     public void Evaluate_CorrectExpression_ReturnsCorrectResult(string expression, double expectedResult)
     {
         parseTree.Build(expression);
-        Assert.That(Math.Abs(parseTree.Evaluate() - expectedResult) < delta);
+        Assert.That(Math.Abs(parseTree.Evaluate() - expectedResult), Is.LessThan(delta));
     }
 
     [TestCase("(* (+ 1 1) 2)")]

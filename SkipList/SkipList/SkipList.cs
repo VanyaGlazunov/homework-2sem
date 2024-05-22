@@ -8,6 +8,7 @@ using System.Collections;
 /// <typeparam name="T">The type of elements in skip list.</typeparam>
 public class SkipList<T> : IList<T>
 {
+    private const double PushUpProbability = 0.5;
     private readonly Comparer<T> comparer;
     private readonly Random random = new ();
     private int version;
@@ -235,7 +236,7 @@ public class SkipList<T> : IList<T>
         if (downNode != null || node.Down == null)
         {
             node.Next = new () { Next = node.Next, Down = downNode, Key = key };
-            if (random.NextDouble() < 0.5)
+            if (random.NextDouble() < PushUpProbability)
             {
                 return node.Next;
             }

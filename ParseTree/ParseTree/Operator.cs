@@ -6,7 +6,7 @@ namespace ParseTree;
 /// <param name="operation">Operation sign.</param>
 public class Operator(char operation) : IParseTreeNode
 {
-    private char operation = operation;
+    private readonly char operation = operation;
 
     /// <summary>
     /// Gets or sets reference to the left child of the node.

@@ -1,8 +1,4 @@
-using NUnit.Framework.Constraints;
-using NUnit.Framework.Internal;
-
 namespace StackCalculator.Tests;
-
 
 public class CalculatorTests
 {
@@ -11,7 +7,7 @@ public class CalculatorTests
     private static IEnumerable<TestCaseData> Calculator()
     {
         yield return new TestCaseData(new StackCalculator(new ListStack()));
-        yield return new TestCaseData(new StackCalculator(new LinkedListStack()));
+        yield return new TestCaseData(new StackCalculator(new ArrayListStack()));
     }    
 
     [TestCaseSource(nameof(Calculator))]
@@ -20,7 +16,8 @@ public class CalculatorTests
         var expression = "1 2 + 5 *";
         var expected = 15f;
         var (actual, isCorrect) = calculator.Calculate(expression);
-        Assert.That(isCorrect && Math.Abs(actual - expected) < Delta);
+        Assert.That(isCorrect, Is.True);
+        Assert.That(Math.Abs(actual - expected), Is.LessThan(Delta));
     }
 
     [TestCaseSource(nameof(Calculator))]
@@ -28,7 +25,7 @@ public class CalculatorTests
     {
         var expression = "1 2 + 5";
         var (actual, isCorrect) = calculator.Calculate(expression);
-        Assert.That(!isCorrect);
+        Assert.That(isCorrect, Is.False);
     }
 
     [TestCaseSource(nameof(Calculator))]
@@ -37,7 +34,8 @@ public class CalculatorTests
         var expression = "6 5 * 3 /";
         var expected = 10f;
         var (actual, isCorrect) = calculator.Calculate(expression);
-        Assert.That(isCorrect && Math.Abs(actual - expected) < Delta);
+        Assert.That(isCorrect, Is.True);
+        Assert.That(Math.Abs(actual - expected), Is.LessThan(Delta));
     }
 
     [TestCaseSource(nameof(Calculator))]
@@ -46,7 +44,8 @@ public class CalculatorTests
         var expression = "1000 2000 + 1000 * 5 /";
         var expected = 600000f;
         var (actual, isCorrect) = calculator.Calculate(expression);
-        Assert.That(isCorrect && Math.Abs(actual - expected) < Delta);
+        Assert.That(isCorrect, Is.True);
+        Assert.That(Math.Abs(actual - expected), Is.LessThan(Delta));
     }
 
     [TestCaseSource(nameof(Calculator))]
@@ -54,7 +53,7 @@ public class CalculatorTests
     {
         var expression = "1000 2000 + 100 100 - /";
         var (actual, isCorrect) = calculator.Calculate(expression);
-        Assert.That(!isCorrect);
+        Assert.That(isCorrect, Is.False);
     }
 
     [TestCaseSource(nameof(Calculator))]
@@ -63,6 +62,7 @@ public class CalculatorTests
         var expression = "1 2 /";
         var expected = 0.5f;
         var (actual, isCorrect) = calculator.Calculate(expression);
-        Assert.That(isCorrect && Math.Abs(actual - expected) < Delta);
+        Assert.That(isCorrect, Is.True);
+        Assert.That(Math.Abs(actual - expected), Is.LessThan(Delta));
     }
 }

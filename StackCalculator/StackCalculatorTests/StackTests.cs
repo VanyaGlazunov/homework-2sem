@@ -5,7 +5,7 @@ public class StackTests
     private static IEnumerable<TestCaseData> Stack()
     {
         yield return new TestCaseData(new ListStack());
-        yield return new TestCaseData(new LinkedListStack());
+        yield return new TestCaseData(new ArrayListStack());
     }
 
     [TestCaseSource(nameof(Stack))]
@@ -42,7 +42,8 @@ public class StackTests
         for (var i = 9; i >= 0; --i)
         {
             var (element, isPopped) = stack.Pop();
-            Assert.That(element == i && isPopped);
+            Assert.That(isPopped, Is.True);
+            Assert.That(element, Is.EqualTo(i));
         }
     }
 }

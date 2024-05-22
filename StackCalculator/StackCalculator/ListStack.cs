@@ -13,10 +13,10 @@ public class ListStack : IStack
     public ListStack() => this.list = new ();
 
     /// <inheritdoc/>
-    public bool IsEmpty { get => this.list.Count == 0; }
+    public bool IsEmpty => this.list.Count == 0;
 
     /// <inheritdoc/>
-    public (float element, bool isPopped) Pop()
+    public (float Element, bool IsPopped) Pop()
     {
         if (this.IsEmpty)
         {
